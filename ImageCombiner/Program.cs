@@ -10,26 +10,75 @@ namespace ImageCombiner
 {
     class Program
     {
+        private static int imagesInRow = 2;
+        private static int height = 1000;
+        private static readonly double ratio = 0.675;
+        private static readonly double headerRatio = 1.925;
+        private static int width;
+
         static void Main(string[] args)
         {
             WebClient wc = new WebClient();
             List<string> vs = new List<string> {
                 "https://m.media-amazon.com/images/M/MV5BMTk3NGQ4NjMtZTU1Mi00MTJjLTllMjUtOTNlN2I3NzU5ZjE1XkEyXkFqcGdeQXVyNTkyMjQwNw@@",
-                "https://m.media-amazon.com/images/M/MV5BZTU1N2VhNjctZWVjMy00MDMwLTg4MDMtMjRjMDM2NDFlMzM4XkEyXkFqcGdeQXVyNzExNDQ2NDM@"
+                "https://m.media-amazon.com/images/M/MV5BZTU1N2VhNjctZWVjMy00MDMwLTg4MDMtMjRjMDM2NDFlMzM4XkEyXkFqcGdeQXVyNzExNDQ2NDM@",
+                "https://m.media-amazon.com/images/M/MV5BMTk3NGQ4NjMtZTU1Mi00MTJjLTllMjUtOTNlN2I3NzU5ZjE1XkEyXkFqcGdeQXVyNTkyMjQwNw@@",
+                "https://m.media-amazon.com/images/M/MV5BZTU1N2VhNjctZWVjMy00MDMwLTg4MDMtMjRjMDM2NDFlMzM4XkEyXkFqcGdeQXVyNzExNDQ2NDM@",
+                "https://m.media-amazon.com/images/M/MV5BMTk3NGQ4NjMtZTU1Mi00MTJjLTllMjUtOTNlN2I3NzU5ZjE1XkEyXkFqcGdeQXVyNTkyMjQwNw@@",
+                "https://m.media-amazon.com/images/M/MV5BZTU1N2VhNjctZWVjMy00MDMwLTg4MDMtMjRjMDM2NDFlMzM4XkEyXkFqcGdeQXVyNzExNDQ2NDM@",
+                "https://m.media-amazon.com/images/M/MV5BMTk3NGQ4NjMtZTU1Mi00MTJjLTllMjUtOTNlN2I3NzU5ZjE1XkEyXkFqcGdeQXVyNTkyMjQwNw@@",
+                "https://m.media-amazon.com/images/M/MV5BZTU1N2VhNjctZWVjMy00MDMwLTg4MDMtMjRjMDM2NDFlMzM4XkEyXkFqcGdeQXVyNzExNDQ2NDM@",
+                "https://m.media-amazon.com/images/M/MV5BMTk3NGQ4NjMtZTU1Mi00MTJjLTllMjUtOTNlN2I3NzU5ZjE1XkEyXkFqcGdeQXVyNTkyMjQwNw@@",
+                "https://m.media-amazon.com/images/M/MV5BZTU1N2VhNjctZWVjMy00MDMwLTg4MDMtMjRjMDM2NDFlMzM4XkEyXkFqcGdeQXVyNzExNDQ2NDM@",
+                "https://m.media-amazon.com/images/M/MV5BMTk3NGQ4NjMtZTU1Mi00MTJjLTllMjUtOTNlN2I3NzU5ZjE1XkEyXkFqcGdeQXVyNTkyMjQwNw@@",
+                "https://m.media-amazon.com/images/M/MV5BMTk3NGQ4NjMtZTU1Mi00MTJjLTllMjUtOTNlN2I3NzU5ZjE1XkEyXkFqcGdeQXVyNTkyMjQwNw@@",
+                "https://m.media-amazon.com/images/M/MV5BZTU1N2VhNjctZWVjMy00MDMwLTg4MDMtMjRjMDM2NDFlMzM4XkEyXkFqcGdeQXVyNzExNDQ2NDM@",
+                "https://m.media-amazon.com/images/M/MV5BMTk3NGQ4NjMtZTU1Mi00MTJjLTllMjUtOTNlN2I3NzU5ZjE1XkEyXkFqcGdeQXVyNTkyMjQwNw@@",
+                "https://m.media-amazon.com/images/M/MV5BZTU1N2VhNjctZWVjMy00MDMwLTg4MDMtMjRjMDM2NDFlMzM4XkEyXkFqcGdeQXVyNzExNDQ2NDM@",
+                "https://m.media-amazon.com/images/M/MV5BMTk3NGQ4NjMtZTU1Mi00MTJjLTllMjUtOTNlN2I3NzU5ZjE1XkEyXkFqcGdeQXVyNTkyMjQwNw@@",
+                "https://m.media-amazon.com/images/M/MV5BZTU1N2VhNjctZWVjMy00MDMwLTg4MDMtMjRjMDM2NDFlMzM4XkEyXkFqcGdeQXVyNzExNDQ2NDM@",
+                "https://m.media-amazon.com/images/M/MV5BMTk3NGQ4NjMtZTU1Mi00MTJjLTllMjUtOTNlN2I3NzU5ZjE1XkEyXkFqcGdeQXVyNTkyMjQwNw@@",
+                "https://m.media-amazon.com/images/M/MV5BZTU1N2VhNjctZWVjMy00MDMwLTg4MDMtMjRjMDM2NDFlMzM4XkEyXkFqcGdeQXVyNzExNDQ2NDM@",
+                "https://m.media-amazon.com/images/M/MV5BMTk3NGQ4NjMtZTU1Mi00MTJjLTllMjUtOTNlN2I3NzU5ZjE1XkEyXkFqcGdeQXVyNTkyMjQwNw@@",
+                "https://m.media-amazon.com/images/M/MV5BZTU1N2VhNjctZWVjMy00MDMwLTg4MDMtMjRjMDM2NDFlMzM4XkEyXkFqcGdeQXVyNzExNDQ2NDM@",
+                "https://m.media-amazon.com/images/M/MV5BMTk3NGQ4NjMtZTU1Mi00MTJjLTllMjUtOTNlN2I3NzU5ZjE1XkEyXkFqcGdeQXVyNTkyMjQwNw@@",
             };
-            var images = vs.Select(s => ResizeImage(Image.FromStream(new MemoryStream(wc.DownloadData(s))),1000)).ToList();
-            var width = 0;
-            foreach (var item in images)
+            imagesInRow = GetImagesInRowCount(vs.Count, headerRatio);
+            var images = vs.Select(s => ResizeImage(Image.FromStream(new MemoryStream(wc.DownloadData(s))),height)).ToList();
+
+     
+
+            int forMax = 0;
+            if (images.Count % imagesInRow == 0)
+                forMax = images.Count / imagesInRow;
+            else
+                forMax = images.Count / imagesInRow + 1;
+
+            var headerWidth = imagesInRow * width;
+            var headerHeight = forMax * height;
+            var bitmapImage = new Bitmap(headerWidth, headerHeight);
+
+            for (int i = 0; i < forMax; i++)
             {
-                width += item.Width;
+                for (int j = 0; j < imagesInRow; j++)
+                {
+                    using (Graphics g = Graphics.FromImage(bitmapImage))
+                    {
+                        int index = imagesInRow * i + j;
+                        try
+                        {
+                            Image image = images[index];
+                            g.DrawImage(image, j * width, i * height);
+                        }
+                        catch (ArgumentOutOfRangeException ex)
+                        {
+                            //its ok
+                        }
+                        
+                    }
+                }
             }
-            var bitmapImage = new Bitmap(width, 1000);
-            using (Graphics g = Graphics.FromImage(bitmapImage))
-            {
-                g.DrawImage(img1, 0, 0);
-                g.DrawImage(img2, img1.Width, 0);
-                bitmapImage.Save("mammad.jpg", ImageFormat.Jpeg);
-            }
+            bitmapImage.Save("mammad.jpg", ImageFormat.Jpeg);
         }
         public static Image ScaleImage(Image image, int maxWidth, int maxHeight)
         {
@@ -57,6 +106,35 @@ namespace ImageCombiner
                 graphics.DrawImage(image, 0, 0, width, height);
 
             return newImage;
+        }
+
+        public static int GetImagesInRowCount(int c,double r)
+        {
+            height = 700;
+            var min = Calculate(700, c, r,false);
+            for (int i = 710; i < 1100; i+= 10)
+            {
+                var calculated = Calculate(i, c, r, false);
+                if (calculated < min)
+                {
+                    min = calculated;
+                    height = i;
+                }
+            }
+            return (int)Calculate(height, c, r, true);
+        }
+
+        private static double Calculate(int h, int c,double r, bool isRow)
+        {
+            var soorat = r * h * c;
+            width = (int)(ratio * h);
+            var x = Math.Sqrt(soorat / width);
+            var floor = (int)Math.Floor(x);
+            var ceiling = (int)Math.Ceiling(x);
+            if (!isRow)
+                return Math.Abs(x - ceiling) > Math.Abs(x - floor) ? Math.Abs(x - floor) : Math.Abs(x - ceiling);
+            else
+                return Math.Abs(x - ceiling) > Math.Abs(x - floor) ? floor : ceiling;
         }
 
     }
